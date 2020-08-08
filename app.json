@@ -1,0 +1,12 @@
+{
+  "name": "blog-demo",
+  "displayName": "blog-demo",
+  "expo": {
+    "name": "blog-demo",
+    "slug": "blog-demo",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
