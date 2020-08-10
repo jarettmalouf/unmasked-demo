@@ -22,14 +22,12 @@ const actions = {
 };
 
 function Blog({
-  title,
   posts,
   isEditing,
   isCreating,
   activateCreating,
   deleteAllPosts,
 }: {
-  title: string;
   posts: Post[];
   isEditing: boolean;
   isCreating: boolean;
@@ -39,52 +37,54 @@ function Blog({
   return (
     <>
       <Container>
-        <DemoTitle>{title}</DemoTitle>
-        <ActionButton
-          text="Create New Post"
-          showCondition={!(isCreating || isEditing)}
-          action={() => activateCreating()}
-        />
-        {(isEditing || isCreating) && <SubmitPostBox />}
+        <DemoTitle>Demo</DemoTitle>
+        <CreateContainer>
+          {!(isCreating || isEditing) ? (
+            <ActionButton
+              text="Create New Post"
+              action={() => activateCreating()}
+            />
+          ) : (
+            <SubmitPostBox />
+          )}
+        </CreateContainer>
         <PostArea />
-        <ActionButton
-          text="Delete All Posts"
-          showCondition={posts.length > 0}
-          action={() => deleteAllPosts()}
-        />
       </Container>
+      <DeleteButtonContainer>
+        {posts.length > 0 && (
+          <ActionButton
+            text="Delete All Posts"
+            action={() => deleteAllPosts()}
+          />
+        )}
+      </DeleteButtonContainer>
     </>
   );
 
-  function ActionButton({
-    text,
-    showCondition,
-    action,
-  }: {
-    text: string;
-    showCondition: boolean;
-    action: Function;
-  }) {
-    if (showCondition) {
-      return (
-        <ButtonWrapper onPress={action}>
-          <Button backgroundColor="white" buttonText={text} />
-        </ButtonWrapper>
-      );
-    }
-    return;
+  function ActionButton({ text, action }: { text: string; action: Function }) {
+    return (
+      <ButtonWrapper onPress={action}>
+        <Button backgroundColor="white" buttonText={text} />
+      </ButtonWrapper>
+    );
   }
 }
 
 export default connect(select, actions)(Blog);
 
 const Container = styled.SafeAreaView`
-  flex: 1;
-  flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
 `;
+
+const DeleteButtonContainer = styled.View`
+  position: absolute;
+  bottom: 20px;
+  align-self: center;
+`;
+const CreateContainer = styled.View``;
 
 const DemoTitle = styled(PostTitle)`
   font-size: 50px;
+  margin-vertical: 30px;
 `;

@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Text, View } from "react-native";
+import { Text, TouchableHighlight, View } from "react-native";
 
 import Icon from "react-native-vector-icons/FontAwesome";
 import { StandardBox } from "../../1-helpers/content";

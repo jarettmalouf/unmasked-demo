@@ -32,7 +32,7 @@ function PostArea({
 }) {
   return (
     <Container>
-      {posts.length > 0 ? (
+      {showArea() ? (
         <ScrollableContainer>
           {posts.map(
             (post: PostType, i: number) =>
@@ -52,6 +52,12 @@ function PostArea({
       )}
     </Container>
   );
+
+  function showArea(): boolean {
+    return (
+      posts.length > 0 && !(posts.length === 1 && postBeingEdited !== null)
+    );
+  }
 }
 
 export default connect(select, actions)(PostArea);
@@ -68,5 +74,6 @@ const ScrollableContainer = styled.ScrollView`
 const Container = styled.View``;
 
 const Subtitle = styled(PostTitle)`
+  align-self: center;
   font-size: 25px;
 `;
