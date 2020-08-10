@@ -1,4 +1,5 @@
-import { CONTENT_MAX_LENGTH, TITLE_MAX_LENGTH } from "./constants";
+import { CONTENT_MAX_LENGTH, TITLE_MAX_LENGTH } from "./ducks/constants";
+import { Fields, Post } from "../../1-helpers/interfaces";
 import { Keyboard, Text, TextInput, View } from "react-native";
 import React, { useState } from "react";
 import { RootStateOrAny, connect } from "react-redux";
@@ -12,7 +13,6 @@ import {
 } from "../Post/ducks/actions";
 
 import Button from "../../1-helpers/Button";
-import { Post } from "../../1-helpers/interfaces";
 import styled from "@emotion/native";
 
 const select = (state: RootStateOrAny) => ({
@@ -62,6 +62,7 @@ function SubmitPostBox({
   ] = useState(CONTENT_MAX_LENGTH);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [isEditingContent, setIsEditingContent] = useState(false);
+
   return (
     <Container>
       <CancelButtonWrapper>
@@ -73,23 +74,23 @@ function SubmitPostBox({
       </CancelButtonWrapper>
       <SubmitContainer>
         <TextField
-          name="title"
+          name={Fields.TITLE}
           value={title}
           placeholder="Subject"
           enablesReturnKeyAutomatically
           maxLength={25}
-          onChangeText={(text) => handleTextChange(text, "title")}
           onEndEditing={() => setIsEditingTitle(false)}
+          onChangeText={(text) => handleTextChange(text, Fields.TITLE)}
         />
         <TextField
-          name="content"
+          name={Fields.CONTENT}
           value={content}
           placeholder="Speak your mind"
           enablesReturnKeyAutomatically
           multiline
           maxLength={150}
-          onChangeText={(text) => handleTextChange(text, "content")}
           onEndEditing={() => setIsEditingContent(false)}
+          onChangeText={(text) => handleTextChange(text, Fields.CONTENT)}
         />
         <Button buttonText="Submit" handlePress={() => handleSubmit()} />
         <RemainingCharactersBox />
@@ -120,7 +121,6 @@ function SubmitPostBox({
     Keyboard.dismiss();
     setTitle("");
     setContent("");
-
     return;
   }
 
@@ -129,45 +129,48 @@ function SubmitPostBox({
   }
 
   function handleTextChange(text: string, name: string) {
-    if (name === "content") {
-      setIsEditingTitle(false);
+    if (name === Fields.CONTENT) {
       setIsEditingContent(true);
       setContent(text);
       setNumCharactersRemainingInContent(CONTENT_MAX_LENGTH - text.length);
-    } else if (name === "title") {
+    } else if (name === Fields.TITLE) {
       setIsEditingTitle(true);
-      setIsEditingContent(false);
       setTitle(text);
       setNumCharactersRemainingInTitle(TITLE_MAX_LENGTH - text.length);
     }
   }
 
   function RemainingCharactersBox() {
-    if (
+    const field = showWhichFieldRemainingCharacters();
+    let numCharactersRemaining: number;
+    if (field === Fields.TITLE) {
+      numCharactersRemaining = numCharactersRemainingInTitle;
+    } else if (field === Fields.CONTENT) {
+      numCharactersRemaining = numCharactersRemainingInContent;
+    } else {
+      return <View />;
+    }
+
+    return (
+      <GreyBox>
+        <RemainingCharacters>
+          {numCharactersRemaining !== 0 && "-"}
+          {numCharactersRemaining}
+        </RemainingCharacters>
+      </GreyBox>
+    );
+  }
+
+  function showWhichFieldRemainingCharacters(): string {
+    if (isEditingTitle && numCharactersRemainingInTitle !== TITLE_MAX_LENGTH) {
+      return Fields.TITLE;
+    } else if (
       isEditingContent &&
       numCharactersRemainingInContent !== CONTENT_MAX_LENGTH
     ) {
-      return (
-        <GreyBox>
-          <RemainingCharacters>
-            {numCharactersRemainingInContent !== 0 && "-"}
-            {numCharactersRemainingInContent}
-          </RemainingCharacters>
-        </GreyBox>
-      );
-    } else if (
-      isEditingTitle &&
-      numCharactersRemainingInTitle !== TITLE_MAX_LENGTH
-    ) {
-      return (
-        <GreyBox>
-          <RemainingCharacters>
-            {numCharactersRemainingInTitle !== 0 && "-"}
-            {numCharactersRemainingInTitle}
-          </RemainingCharacters>
-        </GreyBox>
-      );
-    } else return <View />;
+      return Fields.CONTENT;
+    }
+    return "";
   }
 }
 

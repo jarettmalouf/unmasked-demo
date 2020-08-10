@@ -7,6 +7,11 @@ export interface BlogState {
   isCreating: boolean;
 }
 
+export enum Fields {
+  TITLE = "TITLE",
+  CONTENT = "CONTENT",
+}
+
 export interface Post {
   title: string;
   content: string;
