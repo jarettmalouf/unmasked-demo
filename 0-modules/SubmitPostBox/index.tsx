@@ -141,16 +141,17 @@ function SubmitPostBox({
   }
 
   function RemainingCharactersBox() {
-    const field = showWhichFieldRemainingCharacters();
     let numCharactersRemaining: number;
-    if (field === Fields.TITLE) {
+    if (isEditingTitle && numCharactersRemainingInTitle !== TITLE_MAX_LENGTH) {
       numCharactersRemaining = numCharactersRemainingInTitle;
-    } else if (field === Fields.CONTENT) {
+    } else if (
+      isEditingContent &&
+      numCharactersRemainingInContent !== CONTENT_MAX_LENGTH
+    ) {
       numCharactersRemaining = numCharactersRemainingInContent;
     } else {
       return <View />;
     }
-
     return (
       <GreyBox>
         <RemainingCharacters>
@@ -159,18 +160,6 @@ function SubmitPostBox({
         </RemainingCharacters>
       </GreyBox>
     );
-  }
-
-  function showWhichFieldRemainingCharacters(): string {
-    if (isEditingTitle && numCharactersRemainingInTitle !== TITLE_MAX_LENGTH) {
-      return Fields.TITLE;
-    } else if (
-      isEditingContent &&
-      numCharactersRemainingInContent !== CONTENT_MAX_LENGTH
-    ) {
-      return Fields.CONTENT;
-    }
-    return "";
   }
 }
 
