@@ -1,9 +1,9 @@
 import * as React from "react";
 
+import { PostTitle, StandardBox } from "../../1-helpers/content";
 import { Text, TouchableHighlight, View } from "react-native";
 
 import Icon from "react-native-vector-icons/FontAwesome";
-import { StandardBox } from "../../1-helpers/content";
 import styled from "@emotion/native";
 
 export default function Post({ title, content, isFirst, onDelete, onEdit }) {
@@ -21,22 +21,16 @@ export default function Post({ title, content, isFirst, onDelete, onEdit }) {
   );
 }
 
-const PostWrapper = styled(StandardBox)`
-  width: 300px;
-  flex-direction: row;
-  margin-top: ${({ isFirst }) => String(isFirst ? 20 : 0)}px;
-  margin-bottom: 20px;
-`;
-
 const PostBody = styled.View`
   flex: 4;
   padding-left: 10px;
 `;
 
-export const PostTitle = styled.Text`
-  font-weight: bold;
-  font-size: 20px;
-  top: 10px;
+const PostWrapper = styled(StandardBox)`
+  width: 300px;
+  flex-direction: row;
+  margin-top: ${({ isFirst }) => String(isFirst ? 20 : 0)}px;
+  margin-bottom: 20px;
 `;
 
 const PostContent = styled.Text`

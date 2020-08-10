@@ -1,13 +1,13 @@
 import { RootStateOrAny, connect } from "react-redux";
 import { SafeAreaView, Text, View } from "react-native";
-import SubmitPostBox, { ButtonWrapper } from "../SubmitPostBox";
 import { doActivateCreating, doDeleteAllPosts } from "../Post/ducks/actions";
 
 import Button from "../../1-helpers/Button";
 import { Post } from "../../1-helpers/interfaces";
 import PostArea from "../PostArea";
-import { PostTitle } from "../Post";
+import { PostTitle } from "../../1-helpers/content";
 import React from "react";
+import SubmitPostBox from "../SubmitPostBox";
 import styled from "@emotion/native";
 
 const select = (state: RootStateOrAny) => ({
@@ -36,43 +36,35 @@ function Blog({
 }) {
   return (
     <>
-      <Container>
+      <CreateContainer>
         <DemoTitle>Demo</DemoTitle>
-        <CreateContainer>
-          {!(isCreating || isEditing) ? (
-            <ActionButton
-              text="Create New Post"
-              action={() => activateCreating()}
-            />
-          ) : (
-            <SubmitPostBox />
-          )}
-        </CreateContainer>
+        {!(isCreating || isEditing) ? (
+          <Button
+            backgroundColor="white"
+            buttonText="Create New Post"
+            handlePress={() => activateCreating()}
+          />
+        ) : (
+          <SubmitPostBox />
+        )}
         <PostArea />
-      </Container>
+      </CreateContainer>
       <DeleteButtonContainer>
         {posts.length > 0 && (
-          <ActionButton
-            text="Delete All Posts"
-            action={() => deleteAllPosts()}
+          <Button
+            backgroundColor="white"
+            buttonText="Delete All Posts"
+            handlePress={() => deleteAllPosts()}
           />
         )}
       </DeleteButtonContainer>
     </>
   );
-
-  function ActionButton({ text, action }: { text: string; action: Function }) {
-    return (
-      <ButtonWrapper onPress={action}>
-        <Button backgroundColor="white" buttonText={text} />
-      </ButtonWrapper>
-    );
-  }
 }
 
 export default connect(select, actions)(Blog);
 
-const Container = styled.SafeAreaView`
+const CreateContainer = styled.SafeAreaView`
   align-items: center;
   justify-content: center;
 `;
@@ -82,7 +74,6 @@ const DeleteButtonContainer = styled.View`
   bottom: 20px;
   align-self: center;
 `;
-const CreateContainer = styled.View``;
 
 const DemoTitle = styled(PostTitle)`
   font-size: 50px;

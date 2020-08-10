@@ -1,20 +1,24 @@
 import * as React from "react";
 
-import { StandardBox, colors } from "./content";
+import { ButtonWrapper, StandardBox, colors } from "./content";
 
 import styled from "@emotion/native";
 
 export default function Button({
   backgroundColor,
   buttonText,
+  handlePress,
 }: {
   backgroundColor?: string;
   buttonText: string;
+  handlePress: Function;
 }) {
   return (
-    <ButtonBox backgroundColor={backgroundColor}>
-      <ButtonText>{buttonText}</ButtonText>
-    </ButtonBox>
+    <ButtonWrapper onPress={handlePress}>
+      <ButtonBox backgroundColor={backgroundColor}>
+        <ButtonText>{buttonText}</ButtonText>
+      </ButtonBox>
+    </ButtonWrapper>
   );
 }
 

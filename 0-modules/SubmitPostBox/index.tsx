@@ -63,11 +63,13 @@ function SubmitPostBox({
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [isEditingContent, setIsEditingContent] = useState(false);
   return (
-    <>
+    <Container>
       <CancelButtonWrapper>
-        <ButtonWrapper onPress={() => handleCancel({ title, content })}>
-          <Button backgroundColor="white" buttonText="Cancel" />
-        </ButtonWrapper>
+        <Button
+          backgroundColor="white"
+          buttonText="Cancel"
+          handlePress={() => handleCancel({ title, content })}
+        />
       </CancelButtonWrapper>
       <SubmitContainer>
         <TextField
@@ -89,12 +91,10 @@ function SubmitPostBox({
           onChangeText={(text) => handleTextChange(text, "content")}
           onEndEditing={() => setIsEditingContent(false)}
         />
-        <SubmitButtonWrapper onPress={handleSubmit}>
-          <Button buttonText="Submit" />
-        </SubmitButtonWrapper>
+        <Button buttonText="Submit" handlePress={() => handleSubmit()} />
         <RemainingCharactersBox />
       </SubmitContainer>
-    </>
+    </Container>
   );
 
   function handleCancel(post: Post) {
@@ -108,8 +108,7 @@ function SubmitPostBox({
     return;
   }
 
-  function handleSubmit(e: any) {
-    e.preventDefault();
+  function handleSubmit() {
     if (fieldsAreEmpty()) {
       return;
     }
@@ -174,17 +173,11 @@ function SubmitPostBox({
 
 export default connect(select, actions)(SubmitPostBox);
 
-const SubmitContainer = styled(StandardBox)`
-  width: 250px;
-  min-height: 150px;
+const CancelButtonWrapper = styled.View`
   align-items: center;
-  justify-content: space-evenly;
-  margin-bottom: 10px;
 `;
 
-const RemainingCharacters = styled.Text`
-  padding-horizontal: 5px;
-`;
+const Container = styled.View``;
 
 const GreyBox = styled.View`
   background-color: ${colors.LIGHT_GREY};
@@ -197,8 +190,16 @@ const GreyBox = styled.View`
   justify-content: center;
 `;
 
-const CancelButtonWrapper = styled.View`
+const RemainingCharacters = styled.Text`
+  padding-horizontal: 5px;
+`;
+
+const SubmitContainer = styled(StandardBox)`
+  width: 250px;
+  min-height: 150px;
   align-items: center;
+  justify-content: space-evenly;
+  margin-bottom: 10px;
 `;
 
 const TextField = styled.TextInput`
@@ -209,9 +210,3 @@ const TextField = styled.TextInput`
   border-bottom-width: 2.5px;
   border-bottom-color: ${colors.DARK_GREY};
 `;
-
-export const ButtonWrapper = styled.TouchableOpacity`
-  margin-vertical: 10px;
-`;
-
-const SubmitButtonWrapper = styled(ButtonWrapper)``;
